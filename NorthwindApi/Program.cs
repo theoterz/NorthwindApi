@@ -2,9 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using NorthwindBL;
 using NorthwindDAL;
 using NorthwindDAL.Repositories;
-using NorthwindDAL.Services;
+using NorthwindDAL.Interfaces;
 using NorthwindModels;
-using System.Reflection;
 
 internal class Program
 {
@@ -17,9 +16,15 @@ internal class Program
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
         builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
-        builder.Services.AddScoped<ICustomerRepository, CustomerServices>();
-        builder.Services.AddScoped<IProductRepository, ProductServices>();
-        builder.Services.AddScoped<IOrderRepository, OrderServices>();
+        //Inject Repositories
+        builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+        //Inject Bussiness logic
+        builder.Services.AddScoped<CustomerServices>();
+        builder.Services.AddScoped<ProductServices>();
+        builder.Services.AddScoped<OrderServices>();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NorthwindDAL.Repositories;
+using NorthwindBL;
 using NorthwindModels.DTOs;
 
 namespace NorthwindApi.Controllers
@@ -8,16 +8,16 @@ namespace NorthwindApi.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
-        public OrderController(IOrderRepository orderRepository)
+        private readonly OrderServices _orderServices;
+        public OrderController(OrderServices orderServices)
         {
-            _orderRepository = orderRepository;
+            _orderServices = orderServices;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<OrderDTO>> GetAll() 
         {
-            IEnumerable<OrderDTO> orders = _orderRepository.GetAllOrders();
+            IEnumerable<OrderDTO> orders = _orderServices.GetAllOrders();
 
             if (!orders.Any()) return NotFound();
             return Ok(orders);
@@ -26,7 +26,7 @@ namespace NorthwindApi.Controllers
         [HttpGet("{id:int}")]
         public ActionResult<OrderDTO> GetById(int id)
         {
-            OrderDTO? order = _orderRepository.GetOrderById(id);
+            OrderDTO? order = _orderServices.GetOrderById(id);
 
             if (order is null) return NotFound();
             return Ok(order);
@@ -37,7 +37,7 @@ namespace NorthwindApi.Controllers
         {
             if (customerId == null || customerId.Length != 5) return BadRequest();
 
-            IEnumerable<OrderDTO> orders = _orderRepository.GetOrdersByCustomerId(customerId);
+            IEnumerable<OrderDTO> orders = _orderServices.GetOrdersByCustomerId(customerId);
             
             if (!orders.Any()) return NotFound();
             return Ok(orders);
@@ -48,7 +48,7 @@ namespace NorthwindApi.Controllers
         {
             if (customerId is null || customerId.Length != 5 || employeeId <= 0) return BadRequest();
 
-            IEnumerable<OrderDTO> orders = _orderRepository.GetOrdersByCustomerAndEmployee(customerId, employeeId);
+            IEnumerable<OrderDTO> orders = _orderServices.GetOrdersByCustomerAndEmployee(customerId, employeeId);
             
             if (!orders.Any()) return NotFound();
             return Ok(orders);
@@ -59,7 +59,7 @@ namespace NorthwindApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            OrderDTO createdOrder = _orderRepository.AddOrder(newOrder);
+            OrderDTO createdOrder = _orderServices.AddOrder(newOrder);
 
             return CreatedAtAction(nameof(GetById), new { id = createdOrder.OrderID }, createdOrder);
         }
@@ -67,7 +67,7 @@ namespace NorthwindApi.Controllers
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
-            bool result = _orderRepository.DeleteOrder(id);
+            bool result = _orderServices.DeleteOrder(id);
             
             if (result) return NoContent();
             return BadRequest();

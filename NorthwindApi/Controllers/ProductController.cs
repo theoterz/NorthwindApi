@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NorthwindDAL.Repositories;
+using NorthwindBL;
 using NorthwindModels.DTOs;
 
 namespace NorthwindApi.Controllers
@@ -8,16 +8,16 @@ namespace NorthwindApi.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository)
+        private readonly ProductServices _productServices;
+        public ProductController(ProductServices productServices)
         {
-            _productRepository = productRepository;
+            _productServices = productServices;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<ProductDTO>> GetAll()
         {
-            IEnumerable<ProductDTO> products = _productRepository.GetAllProducts();
+            IEnumerable<ProductDTO> products = _productServices.GetAllProducts();
 
             if (!products.Any()) return NotFound();
 
@@ -27,7 +27,7 @@ namespace NorthwindApi.Controllers
         [HttpGet("{id:int}")]
         public ActionResult<ProductDTO> GetById(int id) 
         {
-            ProductDTO? product = _productRepository.GetByProductId(id);
+            ProductDTO? product = _productServices.GetByProductId(id);
 
             if (product is null) return NotFound();
             return Ok(product);
@@ -38,7 +38,7 @@ namespace NorthwindApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            ProductDTO? createdProduct = _productRepository.AddProduct(productDTO);
+            ProductDTO? createdProduct = _productServices.AddProduct(productDTO);
 
             if (createdProduct is null) return BadRequest("Product id already exists.");
             return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
@@ -49,7 +49,7 @@ namespace NorthwindApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            bool result = _productRepository.UpdateProduct(product);
+            bool result = _productServices.UpdateProduct(product);
 
             if (result) return NoContent();
             return NotFound(); 
@@ -58,7 +58,7 @@ namespace NorthwindApi.Controllers
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
-            bool result = _productRepository.DeleteProduct(id);
+            bool result = _productServices.DeleteProduct(id);
 
             if (result) return NoContent();
             return BadRequest();

@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
-using NorthwindDAL.Repositories;
+using NorthwindDAL.Interfaces;
 using NorthwindModels.DTOs;
 using NorthwindModels.Models;
 
-
-namespace NorthwindDAL.Services
+namespace NorthwindBL
 {
-    public class OrderServices : IOrderRepository
+    public class OrderServices
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        public OrderServices(AppDbContext appDbContext, IMapper mapper)
+        public OrderServices(IOrderRepository orderRepository, IMapper mapper)
         {
-            _appDbContext = appDbContext;
+            _orderRepository = orderRepository;
             _mapper = mapper;
         }
 
@@ -22,8 +21,7 @@ namespace NorthwindDAL.Services
 
             newOrder.OrderDate = DateTime.Now;
 
-            _appDbContext.Orders.Add(newOrder);
-            _appDbContext.SaveChanges();
+            _orderRepository.AddOrder(newOrder);
 
             return _mapper.Map<OrderDTO>(newOrder);
         }
@@ -35,34 +33,37 @@ namespace NorthwindDAL.Services
         /// <returns>The method returns if the operation was successful or not</returns>
         public bool DeleteOrder(int id)
         {
-            Order? order = _appDbContext.Orders.Find(id);
+            Order? order = _orderRepository.GetOrderById(id);
 
             if (order is null) return false; 
 
-            _appDbContext.Orders.Remove(_mapper.Map<Order>(order));
-            _appDbContext.SaveChanges();
+            _orderRepository.DeleteOrder(order);
 
             return true;
         }
 
         public IEnumerable<OrderDTO> GetAllOrders()
         {
-            return _appDbContext.Orders.Select(o => _mapper.Map<OrderDTO>(o));
+            IEnumerable<Order> orders = _orderRepository.GetAllOrders();
+            return orders.Select(o => _mapper.Map<OrderDTO>(o));
         }
 
         public OrderDTO? GetOrderById(int id)
         {
-            return _mapper.Map<OrderDTO>(_appDbContext.Orders.Find(id));
+            Order? order = _orderRepository.GetOrderById(id);
+            return _mapper.Map<OrderDTO?>(order);
         }
 
         public IEnumerable<OrderDTO> GetOrdersByCustomerAndEmployee(string customerId, int employeeId)
         {
-            return _appDbContext.Orders.Where(o => o.CustomerID!.Equals(customerId) && o.EmployeeID.Equals(employeeId)).Select(o => _mapper.Map<OrderDTO>(o));
+            IEnumerable<Order> orders = _orderRepository.GetOrdersByCustomerAndEmployee(customerId, employeeId);
+            return orders.Select(o => _mapper.Map<OrderDTO>(o));
         }
 
         public IEnumerable<OrderDTO> GetOrdersByCustomerId(string id)
         {
-            return _appDbContext.Orders.Where(o => o.CustomerID!.Equals(id)).Select(o => _mapper.Map<OrderDTO>(o));
+            IEnumerable<Order> orders = _orderRepository.GetOrdersByCustomerId(id);
+            return orders.Select(o => _mapper.Map<OrderDTO>(o));
         }
 
     }

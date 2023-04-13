@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
-using NorthwindDAL;
-using NorthwindDAL.Repositories;
+using NorthwindDAL.Interfaces;
 using NorthwindModels.DTOs;
 using NorthwindModels.Models;
 
 namespace NorthwindBL
 {
-    public class CustomerServices : ICustomerRepository
+    public class CustomerServices
     {
-        private readonly AppDbContext _dbContext;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
-        public CustomerServices(AppDbContext dbContext, IMapper mapper)
+        public CustomerServices(ICustomerRepository customerRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _customerRepository = customerRepository;
             _mapper = mapper;
 
         }
@@ -26,10 +25,10 @@ namespace NorthwindBL
         {
             customerDTO.CustomerID = customerDTO.CustomerID.ToUpper();
 
-            if (_dbContext.Customers.Any(c => c.CustomerID.Equals(customerDTO.CustomerID))) return null;
+            if (_customerRepository.CustomerExists(customerDTO.CustomerID)) return null;
 
-            _dbContext.Add(_mapper.Map<Customer>(customerDTO));
-            _dbContext.SaveChanges();
+            Customer newCustomer = _mapper.Map<Customer>(customerDTO);
+            _customerRepository.AddCustomer(newCustomer);
 
             return customerDTO;
         }
@@ -41,29 +40,31 @@ namespace NorthwindBL
         /// <returns>The method returns if the operation was successful or not</returns>
         public bool DeleteCustomer(string id)
         {
-            Customer? customer = _dbContext.Customers.Find(id);
+            Customer? customer = _customerRepository.GetById(id);
 
             if (customer is null) return false;
 
-            _dbContext.Customers.Remove(customer);
-            _dbContext.SaveChanges();
+            _customerRepository.DeleteCustomer(customer);
 
             return true;
         }
 
-        public IEnumerable<CustomerDTO> GetAll()
+        public IEnumerable<CustomerDTO> GetAllCustomers()
         {
-            return _dbContext.Customers.Select(c => _mapper.Map<CustomerDTO>(c));
+            IEnumerable<Customer> customers = _customerRepository.GetAll();
+            return customers.Select(c => _mapper.Map<CustomerDTO>(c));
         }
 
         public IEnumerable<CustomerDTO> GetByCompanyName(string name)
         {
-            return _dbContext.Customers.Where(c => c.CompanyName.Contains(name)).Select(c => _mapper.Map<CustomerDTO>(c));
+            IEnumerable<Customer> customers = _customerRepository.GetByCompanyName(name);
+            return customers.Select(c => _mapper.Map<CustomerDTO>(c));
         }
 
         public CustomerDTO? GetById(string id)
         {
-            return _mapper.Map<CustomerDTO>(_dbContext.Customers.Find(id));
+            Customer? customer = _customerRepository.GetById(id);
+            return _mapper.Map<CustomerDTO>(customer);
         }
 
         /// <summary>
@@ -71,19 +72,16 @@ namespace NorthwindBL
         /// </summary>
         /// <param name="updatedCustomer"></param>
         /// <returns>The method returns if the operation was successful or not</returns>
-        public bool UpdateCustomer(CustomerUpdateDTO updatedCustomer)
+        public bool UpdateCustomer(CustomerUpdateDTO customerDTO)
         {
-            if (_dbContext.Customers.Any(c => c.CustomerID.Equals(updatedCustomer.CustomerID)))
-            {
-                Customer customerToUpdate = _mapper.Map<Customer>(updatedCustomer);
 
-                _dbContext.Customers.Update(customerToUpdate);
-                _dbContext.SaveChanges();
+            if (!_customerRepository.CustomerExists(customerDTO.CustomerID)) return false;
 
-                return true;
-            }
+            Customer customerToUpdate = _mapper.Map<Customer>(customerDTO);
+            _customerRepository.UpdateCustomer(customerToUpdate);
 
-            return false;
+            return true;
+
         }
     }
 }
