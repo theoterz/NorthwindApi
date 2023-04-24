@@ -38,24 +38,62 @@ namespace NorthwindApi.Controllers
         [HttpPost]
         public ActionResult<ProductDTO> CreateProduct(ProductCreateDTO productDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest();
 
-            ProductDTO? createdProduct = _productServices.AddProduct(productDTO);
+                ProductDTO? createdProduct = _productServices.AddProduct(productDTO);
 
-            if (createdProduct is null) return BadRequest("Product id already exists.");
-            return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+                if (createdProduct is null) return BadRequest("Product id already exists.");
+                return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
+            }
+            catch (DbUpdateException ex)
+            {
+
+                string? errorMessage = string.Empty;
+                var innerException = ex.InnerException as SqlException;
+                /*The inner exception number reffers to an error taht occurs during an insert command and the value of the foreign key doesn't exist in the table
+                the foreing key refers to.*/
+                if (innerException is not null && innerException.Number == 547)
+                {
+                    if (innerException.Message.Contains("Supplier")) errorMessage = "Supplier doesn't exist\n";
+                    else if (innerException.Message.Contains("Category")) errorMessage = "Category doesn't exist\n";
+
+                    return BadRequest(errorMessage);
+                }
+                else return BadRequest("An error during the update of the database occured!");
+            }
         }
 
 
         [HttpPut]
         public IActionResult Update(ProductDTO product)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest();
 
-            bool result = _productServices.UpdateProduct(product);
+                bool result = _productServices.UpdateProduct(product);
 
-            if (result) return NoContent();
-            return NotFound(); 
+                if (result) return NoContent();
+                return NotFound();
+            }
+            catch (DbUpdateException ex)
+            {
+
+                string? errorMessage = string.Empty;
+                var innerException = ex.InnerException as SqlException;
+                /*The inner exception number reffers to an error taht occurs during an insert command and the value of the foreign key doesn't exist in the table
+                the foreing key refers to.*/
+                if (innerException is not null && innerException.Number == 547)
+                {
+                    if (innerException.Message.Contains("Supplier")) errorMessage = "Supplier doesn't exist\n";
+                    else if (innerException.Message.Contains("Category")) errorMessage = "Category doesn't exist\n";
+
+                    return BadRequest(errorMessage);
+                }
+                else return BadRequest("An error during the update of the database occured!");
+            }
         }
 
         [HttpDelete("{id:int}")]
