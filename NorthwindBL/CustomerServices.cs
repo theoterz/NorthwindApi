@@ -72,7 +72,7 @@ namespace NorthwindBL
         /// </summary>
         /// <param name="updatedCustomer"></param>
         /// <returns>The method returns if the operation was successful or not</returns>
-        public bool UpdateCustomer(CustomerUpdateDTO customerDTO)
+        public bool UpdateCustomer(CustomerDTO customerDTO)
         {
 
             if (!_customerRepository.CustomerExists(customerDTO.CustomerID)) return false;

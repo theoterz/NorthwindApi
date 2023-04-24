@@ -9,15 +9,15 @@ namespace NorthwindModels
         public AutoMapperProfile()
         {
             CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerDTO, Customer>();
             CreateMap<CustomerCreateDTO, Customer>();
-            CreateMap<CustomerUpdateDTO, Customer>();
 
             CreateMap<Order, OrderDTO>();
             CreateMap<OrderCreateDTO, Order>();
 
             CreateMap<Product, ProductDTO>();
+            CreateMap<ProductDTO, Product>();
             CreateMap<ProductCreateDTO, Product>();
-            CreateMap<ProductUpdateDTO, Product>();
         }
     }
 }

@@ -67,7 +67,7 @@ namespace NorthwindApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateCustomer(CustomerUpdateDTO customerDTO)
+        public IActionResult UpdateCustomer(CustomerDTO customerDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 

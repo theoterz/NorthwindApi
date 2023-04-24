@@ -51,7 +51,7 @@ namespace NorthwindBL
             return _mapper.Map<ProductDTO>(product);
         }
 
-        public bool UpdateProduct(ProductUpdateDTO productDTO)
+        public bool UpdateProduct(ProductDTO productDTO)
         {
             if (!_productRepository.ProductExists(productDTO.ProductId)) return false;
 

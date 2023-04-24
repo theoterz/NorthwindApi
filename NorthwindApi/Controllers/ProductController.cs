@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using NorthwindBL;
 using NorthwindModels.DTOs;
 
@@ -44,8 +46,9 @@ namespace NorthwindApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
         }
 
+
         [HttpPut]
-        public IActionResult Update(ProductUpdateDTO product)
+        public IActionResult Update(ProductDTO product)
         {
             if (!ModelState.IsValid) return BadRequest();
 

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace NorthwindModels.DTOs
 {
     public class OrderCreateDTO
     {
+        [StringLength(5)]
         public string? CustomerID { get; set; }
         public int? EmployeeID { get; set; }
         public int? ShipVia { get; set; }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace NorthwindModels.DTOs
 {
@@ -22,5 +17,8 @@ namespace NorthwindModels.DTOs
         public string? Address { get; set; }
         [MaxLength(15)]
         public string? City { get; set; }
+        public string? Phone { get; set; }
+        [MaxLength(24)]
+        public string? Fax { get; set; }
     }
 }
