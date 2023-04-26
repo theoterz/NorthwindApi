@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NorthwindDAL.Interfaces;
 using NorthwindModels.DTOs;
 using NorthwindModels.Models;
@@ -15,15 +16,22 @@ namespace NorthwindBL
             _mapper = mapper;
         }
 
-        public OrderDTO AddOrder(OrderCreateDTO order)
+        public OrderDTO? AddOrder(OrderCreateDTO order)
         {
-            Order newOrder = _mapper.Map<Order>(order);
+            try
+            {
+                Order newOrder = _mapper.Map<Order>(order);
 
-            newOrder.OrderDate = DateTime.Now;
+                newOrder.OrderDate = DateTime.Now;
 
-            _orderRepository.AddOrder(newOrder);
+                _orderRepository.AddOrder(newOrder);
 
-            return _mapper.Map<OrderDTO>(newOrder);
+                return _mapper.Map<OrderDTO>(newOrder);
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
         }
 
         /// <summary>

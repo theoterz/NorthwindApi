@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using NorthwindBL;
 using NorthwindModels.DTOs;
 
@@ -59,32 +57,12 @@ namespace NorthwindApi.Controllers
         [HttpPost]
         public ActionResult<OrderCreateDTO> Create(OrderCreateDTO newOrder)
         {
-            try
-            {
-                if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest();
 
-                OrderDTO? createdOrder = _orderServices.AddOrder(newOrder);
+            OrderDTO? createdOrder = _orderServices.AddOrder(newOrder);
 
-                if (createdOrder is null) return BadRequest();
-                return CreatedAtAction(nameof(GetById), new { id = createdOrder.OrderID }, createdOrder);
-
-            }catch (DbUpdateException ex)
-            {
-                string? errorMessage = string.Empty;
-                var innerException = ex.InnerException as SqlException;
-                /*The inner exception number reffers to an error taht occurs during an insert command and the value of the foreign key doesn't exist in the table
-                the foreing key refers to.*/
-                if (innerException is not null && innerException.Number == 547)
-                {
-                    if (innerException.Message.Contains("Customer")) errorMessage = "Customer doesn't exist\n";
-                    else if (innerException.Message.Contains("Employee")) errorMessage = "Employee doesn't exist\n";
-                    else if (innerException.Message.Contains("Ship")) errorMessage = "Shipper doesn't exist\n";
-
-                    return BadRequest(errorMessage);
-                }
-                else return BadRequest("An error during the update of the database occured!");
-            }
-            
+            if (createdOrder is null) return BadRequest("The customer, the employee or the shipper doesn't exist");
+            return CreatedAtAction(nameof(GetById), new { id = createdOrder.OrderID }, createdOrder);
         }
 
         [HttpDelete("{id:int}")]

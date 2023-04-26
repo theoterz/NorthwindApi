@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NorthwindDAL.Interfaces;
 using NorthwindModels.DTOs;
 using NorthwindModels.Models;
@@ -19,13 +20,20 @@ namespace NorthwindBL
         public ProductDTO? AddProduct(ProductCreateDTO productDTO)
         {
 
-            Product product = _mapper.Map<Product>(productDTO);
+            try
+            {
+                Product product = _mapper.Map<Product>(productDTO);
 
-            product.Discontinued = false;
+                product.Discontinued = false;
 
-            _productRepository.AddProduct(product);
+                _productRepository.AddProduct(product);
 
-            return _mapper.Map<ProductDTO>(product);
+                return _mapper.Map<ProductDTO>(product);
+            }
+            catch (DbUpdateException )
+            {
+                return null;
+            }
         }
 
         public bool DeleteProduct(int id)
@@ -53,14 +61,20 @@ namespace NorthwindBL
 
         public bool UpdateProduct(ProductDTO productDTO)
         {
-            if (!_productRepository.ProductExists(productDTO.ProductId)) return false;
+            try
+            {
+                if (!_productRepository.ProductExists(productDTO.ProductId)) return false;
 
-            Product product = _mapper.Map<Product>(productDTO);
+                Product product = _mapper.Map<Product>(productDTO);
 
-            _productRepository.UpdateProduct(product);
+                _productRepository.UpdateProduct(product);
 
-            return true;
-
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
     }
 }
