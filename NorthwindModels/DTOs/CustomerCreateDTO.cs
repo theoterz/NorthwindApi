@@ -8,6 +8,7 @@ namespace NorthwindModels.DTOs
         [StringLength(5)]
         public string CustomerID { get; set; } = null!;
         [MaxLength(40)]
+        [Required]
         public string CompanyName { get; set; } = null!;
         [MaxLength(30)]
         public string? ContactName { get; set; }
