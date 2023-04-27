@@ -1,0 +1,13 @@
+﻿@page "/Customers/Update/{Id}";
+
+<a href="@($"/Customers")" class="btn btn-primary m-1" style="position:absolute; right:10px;">Back</a>
+
+@if(_customer is null)
+{
+    <label>The customer doesn't exist</label>
+}
+else
+{
+    <EntityForm Entity="_customer" EntityType="typeof(CustomerDTO)" Operation="UpdateCustomer" OperationName="EntityForm.OperationType.Edit" />
+    <label style="color:red">@_errorMessage</label>
+}

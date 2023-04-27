@@ -1,0 +1,14 @@
+﻿@* For each property in the property list, the component generates a label which contains the property name and it's value*@
+
+@foreach (var property in Properties)
+{
+    <label><b>@StringHelperClass.SplitCamelCase(property.Name):</b> @property.GetValue(Entity)</label>
+}
+<button class="btn btn-danger m-1" @onclick="(() => _showModal = true)">Delete</button>
+
+@if(_showModal)
+{
+    <ConfirmationComponent Text="@($"Are you sure you want to delete this {StringHelperClass.GetEntityType(Entity)}?")" OnClose="OnDelete" DialogType="ConfirmationComponent.ModalDialogType.Delete" />
+}
+
+

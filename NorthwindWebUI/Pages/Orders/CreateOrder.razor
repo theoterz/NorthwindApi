@@ -1,0 +1,5 @@
+﻿@page "/Orders/Create"
+
+<a href="@($"/Orders")" class="btn btn-primary m-1" style="position:absolute; right:10px;">Back</a>
+<EntityForm Entity="_orderCreateDTO" EntityType="typeof(OrderCreateDTO)" Operation="Create" OperationName="EntityForm.OperationType.Create" />
+<label style="color: red">@_message</label>

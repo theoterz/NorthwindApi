@@ -12,9 +12,18 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
         builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+        
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAnyOrigin", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
+        });
 
         //Inject Repositories
         builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -41,6 +50,8 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
+
+        app.UseCors("AllowAnyOrigin");
 
         app.UseAuthorization();
 

@@ -1,0 +1,33 @@
+﻿<h3>@OperationName.ToString() @StringHelperClass.GetEntityType(Entity)</h3>
+
+@*  For each property in the property list, the component generates a label for property name and a field which binds with the property's value for a certain entity.
+    Furthermore there are validators for each property, that takes advantage of the property's atributes.
+*@
+
+<EditForm Model="Entity">
+    
+    <hr />
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    @foreach (var property in Properties)
+    {
+        //If the component is being used to Edit an Entity, then the input is disabled if the property is a primary key
+        bool isDisabled = (OperationName.Equals(OperationType.Edit) && Attribute.IsDefined(property, typeof(KeyAttribute)));
+        
+        <div class="form-group row">
+            
+            <label for="@property.Name" class="col-sm-2 col-form-label"><b>@StringHelperClass.SplitCamelCase(property.Name)</b></label>
+ 
+            <div class="col-sm-5">
+                <input id="@property.Name" disabled="@isDisabled" class="form-control" @bind-value="propertyValues[property.Name.ToString()]" />
+                <ValidationMessage For="@(() => property)" />
+            </div>
+
+        </div>
+    }
+
+    <button style="margin-top: 50px" class="btn btn-primary" @onclick="OnButtonClick">@OperationName.ToString()</button>
+    <hr />
+
+</EditForm>

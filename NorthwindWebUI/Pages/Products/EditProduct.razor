@@ -1,0 +1,12 @@
+﻿@page "/Products/Update/{Id}";
+
+<a href="@($"/Products")" class="btn btn-primary m-1" style="position:absolute; right:10px;">Back</a>
+@if (product is null)
+{
+    <label>The product doesn't exist</label>
+}
+else
+{
+    <EntityForm Entity="product" EntityType="typeof(ProductDTO)" Operation="UpdateProduct" OperationName="EntityForm.OperationType.Edit" />
+    <label style="color:red">@_errorMessage</label>
+}
