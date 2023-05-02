@@ -21,5 +21,14 @@ namespace NorthwindModels.DTOs
         public string? ShipRegion { get; set; }
         [MaxLength(15)]
         public string? ShipCountry { get; set; }
+
+        /// <summary>
+        /// Creates a shallow copy of the object
+        /// </summary>
+        /// <returns>A copy of the object</returns>
+        public OrderDTO Clone()
+        {
+            return (OrderDTO)MemberwiseClone();
+        }
     }
 }

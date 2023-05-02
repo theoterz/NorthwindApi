@@ -15,5 +15,14 @@ namespace NorthwindModels.DTOs
         public string? QuantityPerUnit { get; set; }
         public decimal? UnitPrice { get; set; }
         public bool Discontinued { get; set; }
+
+        /// <summary>
+        /// Creates a shallow copy of the object
+        /// </summary>
+        /// <returns>A copy of the object</returns>
+        public ProductDTO Clone()
+        {
+            return (ProductDTO)MemberwiseClone();
+        }
     }
 }

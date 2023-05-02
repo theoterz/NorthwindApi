@@ -8,6 +8,7 @@ namespace NorthwindModels.DTOs
         [StringLength(5)]
         public string CustomerID { get; set; } = null!;
         [MaxLength(40)]
+        [Required]
         public string CompanyName { get; set; } = null!;
         [MaxLength(30)]
         public string? ContactName { get; set; }
@@ -20,5 +21,14 @@ namespace NorthwindModels.DTOs
         public string? Phone { get; set; }
         [MaxLength(24)]
         public string? Fax { get; set; }
+
+        /// <summary>
+        /// Creates a shallow copy of the object
+        /// </summary>
+        /// <returns>A copy of the object</returns>
+        public CustomerDTO Clone()
+        {
+            return (CustomerDTO)MemberwiseClone();
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace NorthwindModels.DTOs
     {
         [Key]
         [StringLength(5)]
+        [Required]
         public string CustomerID { get; set; } = null!;
         [MaxLength(40)]
         [Required]
