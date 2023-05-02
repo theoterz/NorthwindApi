@@ -1,7 +1,8 @@
 ﻿using NorthwindModels.DTOs;
+using NorthwindUIBL.Interfaces;
 using System.Net.Http.Json;
 
-namespace NorthwindWebUI.Services
+namespace NorthwindUIBL.Services
 {
     public class CustomerService : ICustomerService
     {
@@ -24,7 +25,7 @@ namespace NorthwindWebUI.Services
         {
             var result = await _httpClient.DeleteAsync($"api/Customer/{id}");
 
-            if(result.IsSuccessStatusCode) return true;
+            if (result.IsSuccessStatusCode) return true;
             return false;
         }
 
@@ -47,8 +48,8 @@ namespace NorthwindWebUI.Services
         public async Task<CustomerDTO?> GetById(string id)
         {
             var response = await _httpClient.GetAsync($"api/Customer/{id}");
-            
-            if(response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<CustomerDTO>();
+
+            if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<CustomerDTO>();
             else return null;
         }
 

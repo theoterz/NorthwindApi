@@ -1,0 +1,36 @@
+﻿@page "/Orders";
+
+<PageTitle>Orders</PageTitle>
+<h3>Order List</h3>
+
+@if(!_dataAreLoaded)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <RadzenButton Icon="add" Style="background-color:darkorange; margin-bottom: 20px;" ButtonStyle="ButtonStyle.Primary" Text="Create Order" Click="OnCreate" />
+   
+    <div>
+        <RadzenDataGrid @ref="_ordersGrid" AllowFiltering="true" AllowColumnResize="false" AllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="true" PageSize="10" AllowPaging="true" RowClick="@(args => OnRowClick(args.Data))" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true" Data="_orders" TItem="OrderDTO" ColumnWidth="200px">
+            <Columns>
+                <RadzenDataGridColumn TItem="OrderDTO" Property="OrderID" Filterable="true" Title="ID" Width="100px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="CustomerID" Filterable="true" Title="Customer Id" Width="210px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="EmployeeID" Filterable="true" Title="Employee Id" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="OrderDate" Filterable="true" Title="Order Date" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="ShipVia" Filterable="true" Title="Ship Via" Width="120px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="ShipName" Filterable="true" Title="Ship Name" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="ShipAddress" Filterable="true" Title="Ship Address" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="ShipCity" Filterable="true" Title="Ship City" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="ShipRegion" Filterable="true" Title="Ship Region" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Property="ShipCountry" Filterable="true" Title="Ship Country" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="OrderDTO" Context="order" Sortable="false" Width="70px">
+                    <Template Context="order">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="my-1 ms-1" Click="@(() => DeleteOrder(order.OrderID))" @onclick:stopPropagation="true"></RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+
+}

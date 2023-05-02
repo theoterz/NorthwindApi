@@ -1,6 +1,4 @@
-﻿<h3>@OperationName.ToString() @StringHelperClass.GetEntityType(Entity)</h3>
-
-@*  For each property in the property list, the component generates a label for property name and a field which binds with the property's value for a certain entity.
+﻿@*  For each property in the property list, the component generates a label for property name and a field which binds with the property's value for a certain entity.
     Furthermore there are validators for each property, that takes advantage of the property's atributes.
 *@
 
@@ -17,7 +15,7 @@
         
         <div class="form-group row">
             
-            <label for="@property.Name" class="col-sm-2 col-form-label"><b>@StringHelperClass.SplitCamelCase(property.Name)</b></label>
+            <label for="@property.Name" class="col-sm-4 col-form-label"><b>@StringHelperClass.SplitCamelCase(property.Name)</b></label>
  
             <div class="col-sm-5">
                 <input id="@property.Name" disabled="@isDisabled" class="form-control" @bind-value="propertyValues[property.Name.ToString()]" />
@@ -26,8 +24,12 @@
 
         </div>
     }
+ 
+    <div style="margin-top: 50px">
+        <RadzenButton Icon="save" Text="Save" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" Style="background-color:darkorange" Click="OnSaveClick"/>
+        <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" Click="OnCancelClick" />
+    </div>
 
-    <button style="margin-top: 50px" class="btn btn-primary" @onclick="OnButtonClick">@OperationName.ToString()</button>
     <hr />
 
 </EditForm>

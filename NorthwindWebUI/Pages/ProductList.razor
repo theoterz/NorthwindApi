@@ -1,0 +1,32 @@
+﻿@page "/Products";
+
+<PageTitle>Products</PageTitle>
+<h2>Product List</h2>
+
+@if(!_dataAreLoaded)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <RadzenButton Icon="add" Style="background-color:darkorange; margin-bottom: 20px;" ButtonStyle="ButtonStyle.Primary" Text="Create Product" Click="OnCreate" />
+
+    <div>
+        <RadzenDataGrid @ref="_productsGrid" AllowFiltering="true" AllowColumnResize="false" AllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="true" RowClick="@(args => OnRowClick(args.Data))" PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true" Data="_products" TItem="ProductDTO" ColumnWidth="200px">
+            <Columns>
+                <RadzenDataGridColumn TItem="ProductDTO" Property="ProductId" Filterable="true" Title="ID" Width="100px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Property="ProductName" Filterable="true" Title="Product Name" Width="210px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Property="SupplierId" Filterable="true" Title="Supplier Id" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Property="CategoryId" Filterable="true" Title="Category Id" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Property="QuantityPerUnit" Filterable="true" Title="Quantity Per Unit" Width="120px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Property="UnitPrice" Filterable="true" Title="Unit Price" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Property="Discontinued" Filterable="true" Title="Discontinued" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Context="product" Sortable="false" Width="70px">
+                    <Template Context="product">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="my-1 ms-1" Click="@(() => DeleteProduct(product.ProductId))" @onclick:stopPropagation="true"></RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}

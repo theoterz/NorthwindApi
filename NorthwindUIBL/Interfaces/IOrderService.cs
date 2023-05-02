@@ -1,6 +1,6 @@
 ﻿using NorthwindModels.DTOs;
 
-namespace NorthwindWebUI.Services
+namespace NorthwindUIBL.Interfaces
 {
     public interface IOrderService
     {
@@ -10,5 +10,6 @@ namespace NorthwindWebUI.Services
         public Task<IEnumerable<OrderDTO>?> GetByCustomerAndEmployee(string customerId, int employeeId);
         public Task<string> Create(OrderCreateDTO orderDTO);
         public Task<bool> Delete(int id);
+        public Task<string> Update(OrderDTO orderDTO);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using NorthwindModels.DTOs;
 
-namespace NorthwindWebUI.Services
+namespace NorthwindUIBL.Interfaces
 {
     public interface IProductService
     {

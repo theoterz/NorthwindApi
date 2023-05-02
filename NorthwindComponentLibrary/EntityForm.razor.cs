@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Radzen;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -18,9 +19,11 @@ namespace NorthwindComponentLibrary
         public Type EntityType { get; set; } = null!;
         [Parameter]
         public EventCallback<Object> Operation { get; set; }
+        [Inject]
+        private DialogService DialogService { get; set; } = null!;
 
         private IList<PropertyInfo> Properties { get; set; } = null!;
-        private Dictionary<string, string?> propertyValues = new Dictionary<string, string?>();
+        private Dictionary<string, string?> propertyValues = new();
 
         public enum OperationType
         {
@@ -43,21 +46,28 @@ namespace NorthwindComponentLibrary
         /// from the dictionary, then it gets the property's type and it converts the value.
         /// </summary>
         /// <returns></returns>
-        private async Task OnButtonClick()
+        private async Task OnSaveClick()
         {
-            foreach (var property in Properties) 
+            foreach (var property in Properties)
             {
                 var propertyValue = propertyValues[property.Name];
-                if (!string.IsNullOrEmpty(propertyValue))
+
+                if (propertyValue is not null)
                 {
                     Type targetType = property.PropertyType;
                     //The TypeDescriptor.GetConverter method is used to get a type converter for the target type.
                     var convertedValue = TypeDescriptor.GetConverter(targetType).ConvertFromString(propertyValue);
                     property.SetValue(Entity, convertedValue);
                 }
+                else property.SetValue(Entity, null);
             }
 
             await Operation.InvokeAsync(Entity);
+        }
+
+        private void OnCancelClick()
+        {
+            DialogService.Close();
         }
     }
 }

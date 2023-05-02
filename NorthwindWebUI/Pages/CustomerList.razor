@@ -1,0 +1,36 @@
+﻿@page "/Customers"
+
+<PageTitle>Customers</PageTitle>
+<h2>Customer List</h2>
+
+@if (!_dataAreLoaded)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <RadzenButton Icon="add" Style="background-color:darkorange; margin-bottom: 20px;" ButtonStyle="ButtonStyle.Primary" Text="Create Customer" Click="OnCreate" />
+
+    <div>
+        <RadzenDataGrid @ref="_customersGrid" AllowFiltering="true" AllowColumnResize="false" AllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="true" PageSize="10" AllowPaging="true" RowClick="@(args => OnRowClick(args.Data))" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true" Data="_customers" TItem="CustomerDTO" ColumnWidth="200px">
+            <Columns>
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="CustomerID" Filterable="true" Title="ID" Width="100px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="CompanyName" Filterable="true" Title="Company Name" Width="210px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="ContactName" Filterable="true" Title="Contact Name" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="ContactTitle" Filterable="true" Title="Contact Title" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="Address" Filterable="true" Title="Address" Width="120px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="City" Filterable="true" Title="City" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="Phone" Filterable="true" Title="Phone" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Property="Fax" Filterable="true" Title="Fax" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="CustomerDTO" Context="customer" Sortable="false" Width="70px">
+                    <Template Context="customer">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="my-1 ms-1" Click="@(() => DeleteCustomer(customer.CustomerID))" @onclick:stopPropagation="true"></RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}
+
+
+

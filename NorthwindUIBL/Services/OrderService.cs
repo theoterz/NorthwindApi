@@ -1,8 +1,9 @@
 ﻿using NorthwindModels.DTOs;
+using NorthwindUIBL.Interfaces;
 using System.Net;
 using System.Net.Http.Json;
 
-namespace NorthwindWebUI.Services
+namespace NorthwindUIBL.Services
 {
     public class OrderService : IOrderService
     {
@@ -18,7 +19,7 @@ namespace NorthwindWebUI.Services
             string message = string.Empty;
 
             if (result.IsSuccessStatusCode) message = "Success";
-            else if(result.StatusCode == HttpStatusCode.BadRequest)
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var errorStream = await result.Content.ReadAsStreamAsync();
                 message = new StreamReader(errorStream).ReadToEnd();
@@ -66,6 +67,23 @@ namespace NorthwindWebUI.Services
 
             if (reply.IsSuccessStatusCode) return await reply.Content.ReadFromJsonAsync<OrderDTO>();
             else return null;
+        }
+
+        public async Task<string> Update(OrderDTO orderDTO)
+        {
+            var result = await _httpClient.PutAsJsonAsync<OrderDTO>($"api/Order", orderDTO);
+            string message = string.Empty;
+
+            if (result.IsSuccessStatusCode) message = "Success";
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var errorStream = await result.Content.ReadAsStreamAsync();
+                message = new StreamReader(errorStream).ReadToEnd();
+
+                if (message.Contains("validation")) message = "Validation Error";
+            }
+
+            return message;
         }
     }
 }

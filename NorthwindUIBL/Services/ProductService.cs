@@ -1,8 +1,9 @@
 ﻿using NorthwindModels.DTOs;
+using NorthwindUIBL.Interfaces;
 using System.Net;
 using System.Net.Http.Json;
 
-namespace NorthwindWebUI.Services
+namespace NorthwindUIBL.Services
 {
     public class ProductService : IProductService
     {
