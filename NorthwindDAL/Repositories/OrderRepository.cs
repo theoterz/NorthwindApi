@@ -42,5 +42,16 @@ namespace NorthwindDAL.Repositories
         {
             return _appDbContext.Orders.Where(o => o.CustomerID!.Equals(id));
         }
+
+        public bool OrderExists(int id)
+        {
+            return _appDbContext.Orders.Any(o => o.OrderID == id);
+        }
+
+        public void UpdateOrder(Order order)
+        {
+            _appDbContext.Orders.Update(order);
+            _appDbContext.SaveChanges();
+        }
     }
 }

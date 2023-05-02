@@ -74,5 +74,22 @@ namespace NorthwindBL
             return orders.Select(o => _mapper.Map<OrderDTO>(o));
         }
 
+        public bool UpdateOrder(OrderDTO orderDTO)
+        {
+            try
+            {
+                if (!_orderRepository.OrderExists(orderDTO.OrderID)) return false;
+
+                Order order = _mapper.Map<Order>(orderDTO);
+
+                _orderRepository.UpdateOrder(order);
+
+                return true;
+            }
+            catch(DbUpdateException)
+            {
+                return false;
+            }
+        }
     }
 }

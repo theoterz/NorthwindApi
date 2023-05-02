@@ -14,6 +14,7 @@ namespace NorthwindModels
 
             CreateMap<Order, OrderDTO>();
             CreateMap<OrderCreateDTO, Order>();
+            CreateMap<OrderDTO, Order>();
 
             CreateMap<Product, ProductDTO>();
             CreateMap<ProductDTO, Product>();

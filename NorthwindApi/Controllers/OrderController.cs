@@ -65,6 +65,17 @@ namespace NorthwindApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdOrder.OrderID }, createdOrder);
         }
 
+        [HttpPut]
+        public IActionResult Update(OrderDTO orderDTO)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            bool result = _orderServices.UpdateOrder(orderDTO);
+
+            if (result) return NoContent();
+            return BadRequest("The Order, the Customer, the Employee or the Shipper doesn't exist");
+        }
+
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
