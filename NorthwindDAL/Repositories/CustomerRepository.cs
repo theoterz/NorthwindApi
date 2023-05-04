@@ -1,4 +1,5 @@
-﻿using NorthwindDAL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using NorthwindDAL.Interfaces;
 using NorthwindModels.Models;
 
 namespace NorthwindDAL.Repositories
@@ -11,37 +12,37 @@ namespace NorthwindDAL.Repositories
             _appDbContext = appDbContext;
         }
 
-        public void AddCustomer(Customer customer)
+        public async Task AddCustomerAsync(Customer customer)
         {
-            _appDbContext.Customers.Add(customer);
-            _appDbContext.SaveChanges();
+            await _appDbContext.Customers.AddAsync(customer);
+            await _appDbContext.SaveChangesAsync();
         }
 
-        public void DeleteCustomer(Customer customer)
+        public async Task DeleteCustomerAsync(Customer customer)
         {
             _appDbContext.Customers.Remove(customer);
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<Customer> GetAll()
+        public async Task<List<Customer>> GetAllAsync()
         {
-            return _appDbContext.Customers;
+            return await _appDbContext.Customers.ToListAsync();
         }
 
-        public IEnumerable<Customer> GetByCompanyName(string name)
+        public async Task<List<Customer>?> GetByCompanyNameAsync(string name)
         {
-            return _appDbContext.Customers.Where(c => c.CompanyName.Contains(name));
+            return await _appDbContext.Customers.Where(c => c.CompanyName.Contains(name)).ToListAsync();
         }
 
-        public Customer? GetById(string id)
+        public async Task<Customer?> GetByIdAsync(string id)
         {
-            return _appDbContext.Customers.Find(id);
+            return await _appDbContext.Customers.FindAsync(id);
         }
 
-        public void UpdateCustomer(Customer customer)
+        public async Task UpdateCustomerAsync(Customer customer)
         {
             _appDbContext.Customers.Update(customer);
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
         }
 
         public bool CustomerExists(string id)

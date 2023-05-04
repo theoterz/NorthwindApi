@@ -15,7 +15,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<string> Create(OrderCreateDTO orderDTO)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/Order", orderDTO);
+            var result = await _httpClient.PostAsJsonAsync("api/Orders", orderDTO);
             string message = string.Empty;
 
             if (result.IsSuccessStatusCode) message = "Success";
@@ -31,7 +31,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<bool> Delete(int id)
         {
-            var result = await _httpClient.DeleteAsync($"api/Order/{id}");
+            var result = await _httpClient.DeleteAsync($"api/Orders/{id}");
 
             if (result.IsSuccessStatusCode) return true;
             return false;
@@ -39,7 +39,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<IEnumerable<OrderDTO>?> GetAll()
         {
-            var reply = await _httpClient.GetAsync($"api/Order");
+            var reply = await _httpClient.GetAsync($"api/Orders");
 
             if (reply.IsSuccessStatusCode) return await reply.Content.ReadFromJsonAsync<IEnumerable<OrderDTO>>();
             else return null;
@@ -47,7 +47,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<IEnumerable<OrderDTO>?> GetByCustomerAndEmployee(string customerId, int employeeId)
         {
-            var reply = await _httpClient.GetAsync($"api/Order/getByCustomerAndEmployee/{customerId}/{employeeId}");
+            var reply = await _httpClient.GetAsync($"api/Orders/getByCustomerAndEmployee/{customerId}/{employeeId}");
 
             if (reply.IsSuccessStatusCode) return await reply.Content.ReadFromJsonAsync<IEnumerable<OrderDTO>>();
             else return null;
@@ -55,7 +55,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<IEnumerable<OrderDTO>?> GetByCustomerId(string customerId)
         {
-            var reply = await _httpClient.GetAsync($"api/Order/getByCustomer/{customerId}");
+            var reply = await _httpClient.GetAsync($"api/Orders/getByCustomer/{customerId}");
 
             if (reply.IsSuccessStatusCode) return await reply.Content.ReadFromJsonAsync<IEnumerable<OrderDTO>>();
             else return null;
@@ -63,7 +63,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<OrderDTO?> GetById(int id)
         {
-            var reply = await _httpClient.GetAsync($"api/Order/{id}");
+            var reply = await _httpClient.GetAsync($"api/Orders/{id}");
 
             if (reply.IsSuccessStatusCode) return await reply.Content.ReadFromJsonAsync<OrderDTO>();
             else return null;
@@ -71,7 +71,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<string> Update(OrderDTO orderDTO)
         {
-            var result = await _httpClient.PutAsJsonAsync<OrderDTO>($"api/Order", orderDTO);
+            var result = await _httpClient.PutAsJsonAsync<OrderDTO>($"api/Orders", orderDTO);
             string message = string.Empty;
 
             if (result.IsSuccessStatusCode) message = "Success";

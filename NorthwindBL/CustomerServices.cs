@@ -13,7 +13,6 @@ namespace NorthwindBL
         {
             _customerRepository = customerRepository;
             _mapper = mapper;
-
         }
 
         /// <summary>
@@ -21,14 +20,14 @@ namespace NorthwindBL
         /// </summary>
         /// <param name="customer"></param>
         /// <returns>The method returns the created customer. If a null value is returned, the customer's id already exists.</returns>
-        public CustomerCreateDTO? AddCustomer(CustomerCreateDTO customerDTO)
+        public async Task<CustomerCreateDTO?> AddCustomerAsync(CustomerCreateDTO customerDTO)
         {
             customerDTO.CustomerID = customerDTO.CustomerID.ToUpper();
 
             if (_customerRepository.CustomerExists(customerDTO.CustomerID)) return null;
 
             Customer newCustomer = _mapper.Map<Customer>(customerDTO);
-            _customerRepository.AddCustomer(newCustomer);
+            await _customerRepository.AddCustomerAsync(newCustomer);
 
             return customerDTO;
         }
@@ -38,32 +37,32 @@ namespace NorthwindBL
         /// </summary>
         /// <param name="id"></param>
         /// <returns>The method returns if the operation was successful or not</returns>
-        public bool DeleteCustomer(string id)
+        public async Task<bool> DeleteCustomerAsync(string id)
         {
-            Customer? customer = _customerRepository.GetById(id);
+            Customer? customer = await _customerRepository.GetByIdAsync(id);
 
             if (customer is null) return false;
 
-            _customerRepository.DeleteCustomer(customer);
+            await _customerRepository.DeleteCustomerAsync(customer);
 
             return true;
         }
 
-        public IEnumerable<CustomerDTO> GetAllCustomers()
+        public async Task<IEnumerable<CustomerDTO>> GetAllCustomersAsync()
         {
-            IEnumerable<Customer> customers = _customerRepository.GetAll();
+            IEnumerable<Customer> customers = await _customerRepository.GetAllAsync();
             return customers.Select(c => _mapper.Map<CustomerDTO>(c));
         }
 
-        public IEnumerable<CustomerDTO> GetByCompanyName(string name)
+        public async Task<IEnumerable<CustomerDTO>?> GetByCompanyNameAsync(string name)
         {
-            IEnumerable<Customer> customers = _customerRepository.GetByCompanyName(name);
-            return customers.Select(c => _mapper.Map<CustomerDTO>(c));
+            IEnumerable<Customer>? customers = await _customerRepository.GetByCompanyNameAsync(name);
+            return customers?.Select(c => _mapper.Map<CustomerDTO>(c));
         }
 
-        public CustomerDTO? GetById(string id)
+        public async Task<CustomerDTO?> GetByIdAsync(string id)
         {
-            Customer? customer = _customerRepository.GetById(id);
+            Customer? customer = await _customerRepository.GetByIdAsync(id);
             return _mapper.Map<CustomerDTO>(customer);
         }
 
@@ -72,16 +71,15 @@ namespace NorthwindBL
         /// </summary>
         /// <param name="updatedCustomer"></param>
         /// <returns>The method returns if the operation was successful or not</returns>
-        public bool UpdateCustomer(CustomerDTO customerDTO)
+        public async Task<bool> UpdateCustomerAsync(CustomerDTO customerDTO)
         {
 
             if (!_customerRepository.CustomerExists(customerDTO.CustomerID)) return false;
 
             Customer customerToUpdate = _mapper.Map<Customer>(customerDTO);
-            _customerRepository.UpdateCustomer(customerToUpdate);
+            await _customerRepository.UpdateCustomerAsync(customerToUpdate);
 
             return true;
-
         }
     }
 }

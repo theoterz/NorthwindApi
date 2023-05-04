@@ -1,4 +1,5 @@
-﻿using NorthwindDAL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using NorthwindDAL.Interfaces;
 using NorthwindModels.Models;
 
 namespace NorthwindDAL.Repositories
@@ -11,26 +12,26 @@ namespace NorthwindDAL.Repositories
             _appDbContext = appDbContext;
         }
 
-        public void AddProduct(Product product)
+        public async Task AddProductAsync(Product product)
         {
-            _appDbContext.Products.Add(product);
-            _appDbContext.SaveChanges();
+            await _appDbContext.Products.AddAsync(product);
+            await _appDbContext.SaveChangesAsync();
         }
 
-        public void DeleteProduct(Product product)
+        public async Task DeleteProductAsync(Product product)
         {
             _appDbContext.Products.Remove(product);
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public async Task<List<Product>> GetAllProductsAsync()
         {
-            return _appDbContext.Products;
+            return await _appDbContext.Products.ToListAsync();
         }
 
-        public Product? GetByProductId(int id)
+        public async Task<Product?> GetByProductIdAsync(int id)
         {
-            return _appDbContext.Products.Find(id);
+            return await _appDbContext.Products.FindAsync(id);
         }
 
         public bool ProductExists(int id)
@@ -38,10 +39,10 @@ namespace NorthwindDAL.Repositories
             return _appDbContext.Products.Any(p => p.ProductId == id);
         }
 
-        public void UpdateProduct(Product product)
+        public async Task UpdateProductAsync(Product product)
         {
             _appDbContext.Products.Update(product);
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

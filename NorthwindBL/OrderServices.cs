@@ -16,7 +16,7 @@ namespace NorthwindBL
             _mapper = mapper;
         }
 
-        public OrderDTO? AddOrder(OrderCreateDTO order)
+        public async Task<OrderDTO?> AddOrderAsync(OrderCreateDTO order)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace NorthwindBL
 
                 newOrder.OrderDate = DateTime.Now;
 
-                _orderRepository.AddOrder(newOrder);
+                await _orderRepository.AddOrderAsync(newOrder);
 
                 return _mapper.Map<OrderDTO>(newOrder);
             }
@@ -39,42 +39,42 @@ namespace NorthwindBL
         /// </summary>
         /// <param name="id"></param>
         /// <returns>The method returns if the operation was successful or not</returns>
-        public bool DeleteOrder(int id)
+        public async Task<bool> DeleteOrderAsync(int id)
         {
-            Order? order = _orderRepository.GetOrderById(id);
+            Order? order = await _orderRepository.GetOrderByIdAsync(id);
 
             if (order is null) return false; 
 
-            _orderRepository.DeleteOrder(order);
+            await _orderRepository.DeleteOrderAsync(order);
 
             return true;
         }
 
-        public IEnumerable<OrderDTO> GetAllOrders()
+        public async Task<IEnumerable<OrderDTO>> GetAllOrdersAsync()
         {
-            IEnumerable<Order> orders = _orderRepository.GetAllOrders();
+            IEnumerable<Order> orders = await _orderRepository.GetAllOrdersAsync();
             return orders.Select(o => _mapper.Map<OrderDTO>(o));
         }
 
-        public OrderDTO? GetOrderById(int id)
+        public async Task<OrderDTO?> GetOrderByIdAsync(int id)
         {
-            Order? order = _orderRepository.GetOrderById(id);
+            Order? order = await _orderRepository.GetOrderByIdAsync(id);
             return _mapper.Map<OrderDTO?>(order);
         }
 
-        public IEnumerable<OrderDTO> GetOrdersByCustomerAndEmployee(string customerId, int employeeId)
+        public async Task<IEnumerable<OrderDTO>> GetOrdersByCustomerAndEmployeeAsync(string customerId, int employeeId)
         {
-            IEnumerable<Order> orders = _orderRepository.GetOrdersByCustomerAndEmployee(customerId, employeeId);
+            IEnumerable<Order> orders = await _orderRepository.GetOrdersByCustomerAndEmployeeAsync(customerId, employeeId);
             return orders.Select(o => _mapper.Map<OrderDTO>(o));
         }
 
-        public IEnumerable<OrderDTO> GetOrdersByCustomerId(string id)
+        public async Task<IEnumerable<OrderDTO>> GetOrdersByCustomerIdAsync(string id)
         {
-            IEnumerable<Order> orders = _orderRepository.GetOrdersByCustomerId(id);
+            IEnumerable<Order> orders = await _orderRepository.GetOrdersByCustomerIdAsync(id);
             return orders.Select(o => _mapper.Map<OrderDTO>(o));
         }
 
-        public bool UpdateOrder(OrderDTO orderDTO)
+        public async Task<bool> UpdateOrderAsync(OrderDTO orderDTO)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace NorthwindBL
 
                 Order order = _mapper.Map<Order>(orderDTO);
 
-                _orderRepository.UpdateOrder(order);
+                await _orderRepository.UpdateOrderAsync(order);
 
                 return true;
             }

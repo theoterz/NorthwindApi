@@ -4,62 +4,60 @@ using NorthwindModels.DTOs;
 
 namespace NorthwindApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Products")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly ProductServices _productServices;
-        public ProductController(ProductServices productServices)
+        public ProductsController(ProductServices productServices)
         {
             _productServices = productServices;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ProductDTO>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAll()
         {
-            IEnumerable<ProductDTO> products = _productServices.GetAllProducts();
+            IEnumerable<ProductDTO> products = await _productServices.GetAllProductsAsync();
 
             if (!products.Any()) return NotFound();
-
             return Ok(products);
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<ProductDTO> GetById(int id) 
+        public async Task<ActionResult<ProductDTO>> GetById(int id) 
         {
-            ProductDTO? product = _productServices.GetByProductId(id);
+            ProductDTO? product = await _productServices.GetByProductIdAsync(id);
 
             if (product is null) return NotFound();
             return Ok(product);
         }
 
         [HttpPost]
-        public ActionResult<ProductDTO> CreateProduct(ProductCreateDTO productDTO)
+        public async Task<ActionResult<ProductDTO>> CreateProduct(ProductCreateDTO productDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            ProductDTO? createdProduct = _productServices.AddProduct(productDTO);
+            ProductDTO? createdProduct = await _productServices.AddProductAsync(productDTO);
 
             if (createdProduct is null) return BadRequest("The supplier or the category doesn't exist");
             return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
         }
 
-
         [HttpPut]
-        public IActionResult Update(ProductDTO product)
+        public async Task<IActionResult> Update(ProductDTO product)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            bool result = _productServices.UpdateProduct(product);
+            bool result = await _productServices.UpdateProductAsync(product);
 
             if (result) return NoContent();
             return BadRequest("The product, the supplier or the category doesn't exist");
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            bool result = _productServices.DeleteProduct(id);
+            bool result = await _productServices.DeleteProductAsync(id);
 
             if (result) return NoContent();
             return BadRequest();

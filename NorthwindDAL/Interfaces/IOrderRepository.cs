@@ -4,13 +4,13 @@ namespace NorthwindDAL.Interfaces
 {
     public interface IOrderRepository
     {
-        public IEnumerable<Order> GetAllOrders();
-        public Order? GetOrderById(int id);
-        public IEnumerable<Order> GetOrdersByCustomerId(string id);
-        public IEnumerable<Order> GetOrdersByCustomerAndEmployee(string customerId, int employeeId);
-        public void AddOrder(Order order);
-        public void DeleteOrder(Order order);
-        public void UpdateOrder(Order order);
+        public Task<List<Order>> GetAllOrdersAsync();
+        public Task<Order?> GetOrderByIdAsync(int id);
+        public Task<List<Order>> GetOrdersByCustomerIdAsync(string id);
+        public Task<List<Order>> GetOrdersByCustomerAndEmployeeAsync(string customerId, int employeeId);
+        public Task AddOrderAsync(Order order);
+        public Task DeleteOrderAsync(Order order);
+        public Task UpdateOrderAsync(Order order);
         public bool OrderExists(int id);
     }
 }

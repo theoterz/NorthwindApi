@@ -4,12 +4,12 @@ namespace NorthwindDAL.Interfaces
 {
     public interface ICustomerRepository
     {
-        public IEnumerable<Customer> GetAll();
-        public Customer? GetById(string id);
-        public IEnumerable<Customer> GetByCompanyName(string name);
-        public void AddCustomer(Customer customer);
-        public void DeleteCustomer(Customer customer);
-        public void UpdateCustomer(Customer customer);
+        public Task<List<Customer>> GetAllAsync();
+        public Task<Customer?> GetByIdAsync(string id);
+        public Task<List<Customer>?> GetByCompanyNameAsync(string name);
+        public Task AddCustomerAsync(Customer customer);
+        public Task DeleteCustomerAsync(Customer customer);
+        public Task UpdateCustomerAsync(Customer customer);
         public bool CustomerExists(string id);
     }
 }

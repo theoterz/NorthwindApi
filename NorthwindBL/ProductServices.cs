@@ -17,7 +17,7 @@ namespace NorthwindBL
         }
 
 
-        public ProductDTO? AddProduct(ProductCreateDTO productDTO)
+        public async Task<ProductDTO?> AddProductAsync(ProductCreateDTO productDTO)
         {
 
             try
@@ -26,7 +26,7 @@ namespace NorthwindBL
 
                 product.Discontinued = false;
 
-                _productRepository.AddProduct(product);
+                await _productRepository.AddProductAsync(product);
 
                 return _mapper.Map<ProductDTO>(product);
             }
@@ -36,30 +36,30 @@ namespace NorthwindBL
             }
         }
 
-        public bool DeleteProduct(int id)
+        public async Task<bool> DeleteProductAsync(int id)
         {
-            Product? product = _productRepository.GetByProductId(id);
+            Product? product = await _productRepository.GetByProductIdAsync(id);
 
             if (product is null) return false;
 
-            _productRepository.DeleteProduct(product);
+            await _productRepository.DeleteProductAsync(product);
 
             return true;
         }
 
-        public IEnumerable<ProductDTO> GetAllProducts()
+        public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
         {
-            IEnumerable<Product> products = _productRepository.GetAllProducts();
+            IEnumerable<Product> products = await _productRepository.GetAllProductsAsync();
             return products.Select(p => _mapper.Map<ProductDTO>(p));
         }
 
-        public ProductDTO? GetByProductId(int id)
+        public async Task<ProductDTO?> GetByProductIdAsync(int id)
         {
-            Product? product = _productRepository.GetByProductId(id);
+            Product? product = await _productRepository.GetByProductIdAsync(id);
             return _mapper.Map<ProductDTO>(product);
         }
 
-        public bool UpdateProduct(ProductDTO productDTO)
+        public async Task<bool> UpdateProductAsync(ProductDTO productDTO)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace NorthwindBL
 
                 Product product = _mapper.Map<Product>(productDTO);
 
-                _productRepository.UpdateProduct(product);
+                await _productRepository.UpdateProductAsync(product);
 
                 return true;
             }

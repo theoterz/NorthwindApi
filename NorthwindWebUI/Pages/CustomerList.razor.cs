@@ -41,16 +41,16 @@ namespace NorthwindWebUI.Pages
 
         private async Task CreateCustomer(Object newCustomer)
         {
-            bool result = await CustomerService.Create((CustomerCreateDTO)newCustomer);
+            string result = await CustomerService.Create((CustomerCreateDTO)newCustomer);
             
-            if(result)
+            if(result.Equals("Success"))
             {
                 DialogService.Close();
                 NotificationService.Notify(NotificationSeverity.Success, "The Customer has been created!");
                 await GetAllCustomers();
                 _customersGrid?.Reload();
             }
-            else NotificationService.Notify(NotificationSeverity.Error, "The Customer has not been created");
+            else NotificationService.Notify(NotificationSeverity.Error, result);
         }
 
         private async Task OnRowClick(CustomerDTO customer)

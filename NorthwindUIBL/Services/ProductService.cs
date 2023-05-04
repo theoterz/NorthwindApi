@@ -15,7 +15,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<string> Create(ProductCreateDTO productDTO)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/Product", productDTO);
+            var result = await _httpClient.PostAsJsonAsync("api/Products", productDTO);
             string message = string.Empty;
 
             if (result.IsSuccessStatusCode) message = "Success";
@@ -31,7 +31,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<bool> Delete(int id)
         {
-            var result = await _httpClient.DeleteAsync($"api/Product/{id}");
+            var result = await _httpClient.DeleteAsync($"api/Products/{id}");
 
             if (result.IsSuccessStatusCode) return true;
             return false;
@@ -39,7 +39,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<IEnumerable<ProductDTO>?> GetAll()
         {
-            var reply = await _httpClient.GetAsync($"api/Product");
+            var reply = await _httpClient.GetAsync($"api/Products");
 
             if (reply.IsSuccessStatusCode) return await reply.Content.ReadFromJsonAsync<IEnumerable<ProductDTO>>();
             else return null;
@@ -47,7 +47,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<ProductDTO?> GetById(int id)
         {
-            var response = await _httpClient.GetAsync($"api/Product/{id}");
+            var response = await _httpClient.GetAsync($"api/Products/{id}");
 
             if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<ProductDTO>();
             else return null;
@@ -55,7 +55,7 @@ namespace NorthwindUIBL.Services
 
         public async Task<string> Update(ProductDTO productDTO)
         {
-            var result = await _httpClient.PutAsJsonAsync<ProductDTO>("api/Product", productDTO);
+            var result = await _httpClient.PutAsJsonAsync<ProductDTO>("api/Products", productDTO);
             string message = string.Empty;
 
             if (result.IsSuccessStatusCode) message = "Success";

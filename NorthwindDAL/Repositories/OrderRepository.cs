@@ -1,4 +1,5 @@
-﻿using NorthwindDAL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using NorthwindDAL.Interfaces;
 using NorthwindModels.Models;
 
 namespace NorthwindDAL.Repositories
@@ -11,36 +12,36 @@ namespace NorthwindDAL.Repositories
             _appDbContext = appDbContext;
         }
 
-        public void AddOrder(Order order)
+        public async Task AddOrderAsync(Order order)
         {
-            _appDbContext.Orders.Add(order);
-            _appDbContext.SaveChanges();
+            await _appDbContext.Orders.AddAsync(order);
+            await _appDbContext.SaveChangesAsync();
         }
 
-        public void DeleteOrder(Order order)
+        public async Task DeleteOrderAsync(Order order)
         {
             _appDbContext.Orders.Remove(order);
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<Order> GetAllOrders()
+        public async Task<List<Order>> GetAllOrdersAsync()
         {
-            return _appDbContext.Orders;
+            return await _appDbContext.Orders.ToListAsync();
         }
 
-        public Order? GetOrderById(int id)
+        public async Task<Order?> GetOrderByIdAsync(int id)
         {
-            return _appDbContext.Orders.Find(id);
+            return await _appDbContext.Orders.FindAsync(id);
         }
 
-        public IEnumerable<Order> GetOrdersByCustomerAndEmployee(string customerId, int employeeId)
+        public async Task<List<Order>> GetOrdersByCustomerAndEmployeeAsync(string customerId, int employeeId)
         {
-            return _appDbContext.Orders.Where(o => o.CustomerID!.Equals(customerId) && o.EmployeeID.Equals(employeeId));
+            return await _appDbContext.Orders.Where(o => o.CustomerID!.Equals(customerId) && o.EmployeeID.Equals(employeeId)).ToListAsync();
         }
 
-        public IEnumerable<Order> GetOrdersByCustomerId(string id)
+        public async Task<List<Order>> GetOrdersByCustomerIdAsync(string id)
         {
-            return _appDbContext.Orders.Where(o => o.CustomerID!.Equals(id));
+            return await _appDbContext.Orders.Where(o => o.CustomerID!.Equals(id)).ToListAsync();
         }
 
         public bool OrderExists(int id)
@@ -48,10 +49,10 @@ namespace NorthwindDAL.Repositories
             return _appDbContext.Orders.Any(o => o.OrderID == id);
         }
 
-        public void UpdateOrder(Order order)
+        public async Task UpdateOrderAsync(Order order)
         {
             _appDbContext.Orders.Update(order);
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

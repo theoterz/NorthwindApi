@@ -7,7 +7,7 @@ namespace NorthwindUIBL.Interfaces
         public Task<IEnumerable<CustomerDTO>?> GetAll();
         public Task<CustomerDTO?> GetById(string id);
         public Task<bool> Delete(string id);
-        public Task<bool> Create(CustomerCreateDTO entity);
+        public Task<string> Create(CustomerCreateDTO entity);
         public Task<IEnumerable<CustomerDTO>?> GetByCompanyName(string companyName);
         public Task<bool> UpdateCustomer(CustomerDTO customer);
     }
