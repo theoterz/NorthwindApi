@@ -68,16 +68,16 @@ namespace NorthwindWebUI.Pages
 
         private async Task UpdateCustomer(Object customer)
         {
-            bool result = await CustomerService.UpdateCustomer((CustomerDTO)customer);
+            string result = await CustomerService.UpdateCustomer((CustomerDTO)customer);
 
-            if(result)
+            if(result.Equals("Success"))
             {
                 DialogService.Close();
                 NotificationService.Notify(NotificationSeverity.Success, "The Customer has been updated!");
                 await GetAllCustomers();
                 _customersGrid?.Reload();
             }
-            else NotificationService.Notify(NotificationSeverity.Error, "An error occured during the update!");
+            else NotificationService.Notify(NotificationSeverity.Error, result);
         }
 
         private async Task DeleteCustomer(string id)

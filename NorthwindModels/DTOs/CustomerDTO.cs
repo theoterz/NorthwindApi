@@ -5,10 +5,11 @@ namespace NorthwindModels.DTOs
     public class CustomerDTO
     {
         [Key]
-        [StringLength(5)]
+        [StringLength(5, ErrorMessage = "The field Customer ID must be a string with a maximum length of 5")]
+        [Required(ErrorMessage = "The Customer ID field is required.")]
         public string CustomerID { get; set; } = null!;
         [MaxLength(40)]
-        [Required]
+        [Required(ErrorMessage = "The Company Name field is required.")]
         public string CompanyName { get; set; } = null!;
         [MaxLength(30)]
         public string? ContactName { get; set; }

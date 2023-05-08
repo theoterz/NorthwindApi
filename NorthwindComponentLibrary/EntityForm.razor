@@ -9,14 +9,17 @@
     <ValidationSummary />
     
     @foreach (var property in Properties)
-    {   
+    {
+        //If the component is being used to Edit an Entity, then the input is disabled if the property is a primary key
+        bool isDisabled = (OperationName.Equals(OperationType.Edit) && Attribute.IsDefined(property, typeof(KeyAttribute)));
+
         <div class="form-group row">
             
             <label for="@property.Name" class="col-sm-4 col-form-label"><b>@StringHelperClass.SplitCamelCase(property.Name)</b></label>
  
             <div class="col-sm-5">
-               
-                @*Depending on the property field, the compponent produces the proper field*@
+                               
+                @*Depending on the property type, the compponent produces the proper field*@
                 @if (property.PropertyType == typeof(bool))
                 {
                     bool value = Convert.ToBoolean(propertyValues[property.Name.ToString()]);
@@ -27,10 +30,12 @@
                     DateTime value = Convert.ToDateTime(propertyValues[property.Name.ToString()]);
                     <RadzenDatePicker id="@property.Name" TValue="DateTime" Value="value" Change=@(args => propertyValues[property.Name.ToString()] = args.ToString()) />
                 }
+                else if (property.PropertyType == typeof(decimal) || property.PropertyType == typeof(decimal?) || property.PropertyType == typeof(int) || property.PropertyType == typeof(int?))
+                {
+                    <input id="@property.Name" disabled="@isDisabled" type="number" min="0" class="form-control" @bind-value="propertyValues[property.Name.ToString()]" />
+                }
                 else
                 {
-                    //If the component is being used to Edit an Entity, then the input is disabled if the property is a primary key
-                    bool isDisabled = (OperationName.Equals(OperationType.Edit) && Attribute.IsDefined(property, typeof(KeyAttribute)));
                     <input id="@property.Name" disabled="@isDisabled" class="form-control" @bind-value="propertyValues[property.Name.ToString()]" />
                 }
                 

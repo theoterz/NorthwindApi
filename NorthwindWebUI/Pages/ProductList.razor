@@ -19,7 +19,7 @@ else
                 <RadzenDataGridColumn TItem="ProductDTO" Property="SupplierId" Filterable="true" Title="Supplier Id" Width="150px" TextAlign="TextAlign.Center" />
                 <RadzenDataGridColumn TItem="ProductDTO" Property="CategoryId" Filterable="true" Title="Category Id" Width="150px" TextAlign="TextAlign.Center" />
                 <RadzenDataGridColumn TItem="ProductDTO" Property="QuantityPerUnit" Filterable="true" Title="Quantity Per Unit" Width="120px" TextAlign="TextAlign.Center" />
-                <RadzenDataGridColumn TItem="ProductDTO" Property="UnitPrice" Filterable="true" Title="Unit Price" Width="150px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ProductDTO" Property="UnitPrice" Filterable="true" Title="Unit Price" Width="150px" TextAlign="TextAlign.Center" FormatString="{0:C2}" />
                 <RadzenDataGridColumn TItem="ProductDTO" Property="Discontinued" Filterable="true" Title="Discontinued" Width="150px" TextAlign="TextAlign.Center" />
                 <RadzenDataGridColumn TItem="ProductDTO" Context="product" Sortable="false" Width="70px">
                     <Template Context="product">

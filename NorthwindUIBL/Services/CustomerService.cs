@@ -61,12 +61,21 @@ namespace NorthwindUIBL.Services
             else return null;
         }
 
-        public async Task<bool> UpdateCustomer(CustomerDTO customer)
+        public async Task<string> UpdateCustomer(CustomerDTO customer)
         {
             var result = await _httpClient.PutAsJsonAsync<CustomerDTO>("api/Customers", customer);
+            string message = string.Empty;
 
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            if (result.IsSuccessStatusCode) message = "Success";
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var errorStream = await result.Content.ReadAsStreamAsync();
+                message = new StreamReader(errorStream).ReadToEnd();
+
+                if (message.Contains("validation")) message = "Validation Error";
+            }
+
+            return message;
         }
     }
 }
