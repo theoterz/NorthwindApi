@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NorthwindBL;
 using NorthwindModels.DTOs;
+using NorthwindModels.ErrorMessages;
 
 namespace NorthwindApi.Controllers
 {
@@ -19,18 +20,18 @@ namespace NorthwindApi.Controllers
         {
             IEnumerable<CustomerDTO> customers = await _customerServices.GetAllCustomersAsync();
 
-            if (!customers.Any()) return NotFound();
+            if (!customers.Any()) return NotFound(CustomerErrorMessages.NotFound);
             return Ok(customers);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDTO>> Get(string id)
         {
-            if (id.Length != 5) return BadRequest("The id lenght must be exactly 5 characters");
+            if (id.Length != 5) return BadRequest(CustomerErrorMessages.BadIdLength);
             
             CustomerDTO? customerDTO = await _customerServices.GetByIdAsync(id);
 
-            if (customerDTO == null) return NotFound();
+            if (customerDTO == null) return NotFound(CustomerErrorMessages.NotFound);
             return Ok(customerDTO);
         }
 
@@ -39,18 +40,18 @@ namespace NorthwindApi.Controllers
         {
             IEnumerable<CustomerDTO>? customerDTOs = await _customerServices.GetByCompanyNameAsync(companyName);
 
-            if (customerDTOs is null) return NotFound();
+            if (customerDTOs is null) return NotFound(CustomerErrorMessages.NotFound);
             return Ok(customerDTOs);
         }
 
         [HttpPost]
         public async Task<ActionResult<CustomerCreateDTO>> AddCustomer(CustomerCreateDTO newCustomer)
         {
-            if (!ModelState.IsValid || newCustomer.CustomerID.Length != 5) return BadRequest();
+            if (!ModelState.IsValid || newCustomer.CustomerID.Length != 5) return BadRequest(CustomerErrorMessages.ModelNotValid);
 
             CustomerCreateDTO? addedCustomer = await _customerServices.AddCustomerAsync(newCustomer);
 
-            if (addedCustomer is null) return BadRequest("This Customer already exists!");
+            if (addedCustomer is null) return BadRequest(CustomerErrorMessages.CustomerExists);
             else return CreatedAtAction(nameof(Get), new { id = addedCustomer.CustomerID }, addedCustomer);
 
         }
@@ -67,12 +68,12 @@ namespace NorthwindApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCustomer(CustomerDTO customerDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(CustomerErrorMessages.ModelNotValid);
 
             bool result = await _customerServices.UpdateCustomerAsync(customerDTO);
 
             if(result) return NoContent();
-            return NotFound();
+            return NotFound(CustomerErrorMessages.NotFound);
         }
     }
 }

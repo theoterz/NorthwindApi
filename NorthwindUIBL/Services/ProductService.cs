@@ -1,4 +1,5 @@
 ﻿using NorthwindModels.DTOs;
+using NorthwindModels.ErrorMessages;
 using NorthwindUIBL.Interfaces;
 using System.Net;
 using System.Net.Http.Json;
@@ -18,13 +19,13 @@ namespace NorthwindUIBL.Services
             var result = await _httpClient.PostAsJsonAsync("api/Products", productDTO);
             string message = string.Empty;
 
-            if (result.IsSuccessStatusCode) message = "Success";
+            if (result.IsSuccessStatusCode) message = ProductErrorMessages.Success;
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var errorStream = await result.Content.ReadAsStreamAsync();
                 message = new StreamReader(errorStream).ReadToEnd();
 
-                if (message.Contains("validation")) message = "Validation Error";
+                if (message.Contains("validation")) message = ProductErrorMessages.ValidationError;
             }
             return message;
         }
@@ -58,13 +59,13 @@ namespace NorthwindUIBL.Services
             var result = await _httpClient.PutAsJsonAsync<ProductDTO>("api/Products", productDTO);
             string message = string.Empty;
 
-            if (result.IsSuccessStatusCode) message = "Success";
+            if (result.IsSuccessStatusCode) message = ProductErrorMessages.Success;
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 var errorStream = await result.Content.ReadAsStreamAsync();
                 message = new StreamReader(errorStream).ReadToEnd();
 
-                if (message.Contains("validation")) message = "Validation Error";
+                if (message.Contains("validation")) message = ProductErrorMessages.ValidationError;
             }
             return message;
         }

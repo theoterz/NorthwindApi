@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using NorthwindComponentLibrary;
 using NorthwindModels.DTOs;
+using NorthwindModels.ErrorMessages;
 using NorthwindUIBL.Interfaces;
 using Radzen;
 using Radzen.Blazor;
@@ -43,10 +44,10 @@ namespace NorthwindWebUI.Pages
         {
             string result = await ProductService.Create((ProductCreateDTO)newProduct);
 
-            if (result.Equals("Success"))
+            if (result.Equals(ProductErrorMessages.Success))
             {
                 DialogService.Close();
-                NotificationService.Notify(NotificationSeverity.Success, "The Product has been created!");
+                NotificationService.Notify(NotificationSeverity.Success, ProductErrorMessages.ProductCreated);
                 await GetAllProducts();
                 _productsGrid?.Reload();
             }
@@ -70,10 +71,10 @@ namespace NorthwindWebUI.Pages
         {
             string result = await ProductService.Update((ProductDTO)product);
 
-            if (result.Equals("Success"))
+            if (result.Equals(ProductErrorMessages.Success))
             {
                 DialogService.Close();
-                NotificationService.Notify(NotificationSeverity.Success, "The Product has been updated!");
+                NotificationService.Notify(NotificationSeverity.Success, ProductErrorMessages.ProductUpdated);
                 await GetAllProducts();
                 _productsGrid?.Reload();
             }
@@ -92,9 +93,9 @@ namespace NorthwindWebUI.Pages
                 {
                     await GetAllProducts();
                     _productsGrid?.Reload();
-                    NotificationService.Notify(NotificationSeverity.Success, "The Product is successfuly deleted!");
+                    NotificationService.Notify(NotificationSeverity.Success, ProductErrorMessages.ProductDeleted);
                 }
-                else NotificationService.Notify(NotificationSeverity.Error, "An error occured during the deletion!");
+                else NotificationService.Notify(NotificationSeverity.Error, ProductErrorMessages.DeletionError);
             }
         }
 

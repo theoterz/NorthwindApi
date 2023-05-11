@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using NorthwindComponentLibrary;
 using NorthwindModels.DTOs;
+using NorthwindModels.ErrorMessages;
 using NorthwindUIBL.Interfaces;
 using Radzen;
 using Radzen.Blazor;
@@ -46,7 +47,7 @@ namespace NorthwindWebUI.Pages
             if(result.Equals("Success"))
             {
                 DialogService.Close();
-                NotificationService.Notify(NotificationSeverity.Success, "The Customer has been created!");
+                NotificationService.Notify(NotificationSeverity.Success, CustomerErrorMessages.CustomerCreated);
                 await GetAllCustomers();
                 _customersGrid?.Reload();
             }
@@ -70,10 +71,10 @@ namespace NorthwindWebUI.Pages
         {
             string result = await CustomerService.UpdateCustomer((CustomerDTO)customer);
 
-            if(result.Equals("Success"))
+            if(result.Equals(CustomerErrorMessages.Success))
             {
                 DialogService.Close();
-                NotificationService.Notify(NotificationSeverity.Success, "The Customer has been updated!");
+                NotificationService.Notify(NotificationSeverity.Success, CustomerErrorMessages.CustomerUpdated);
                 await GetAllCustomers();
                 _customersGrid?.Reload();
             }
@@ -91,9 +92,9 @@ namespace NorthwindWebUI.Pages
                 {
                     await GetAllCustomers();
                     _customersGrid?.Reload();
-                    NotificationService.Notify(NotificationSeverity.Success, "The Customer is successfuly deleted!");
+                    NotificationService.Notify(NotificationSeverity.Success, CustomerErrorMessages.CustomerDeleted);
                 }
-                else NotificationService.Notify(NotificationSeverity.Error, "An error occured during the deletion!");
+                else NotificationService.Notify(NotificationSeverity.Error, CustomerErrorMessages.CustomerNotDeleted);
             }
         }
 

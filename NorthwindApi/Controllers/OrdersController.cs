@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NorthwindBL;
 using NorthwindModels.DTOs;
+using NorthwindModels.ErrorMessages;
 
 namespace NorthwindApi.Controllers
 {
@@ -35,7 +36,7 @@ namespace NorthwindApi.Controllers
         [HttpGet("getByCustomer/{customerId}")]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetByCustomer(string customerId)
         {
-            if (customerId == null || customerId.Length != 5) return BadRequest();
+            if (customerId == null || customerId.Length != 5) return BadRequest(CustomerErrorMessages.BadIdLength);
 
             IEnumerable<OrderDTO> orders = await _orderServices.GetOrdersByCustomerIdAsync(customerId);
             
@@ -46,7 +47,8 @@ namespace NorthwindApi.Controllers
         [HttpGet("getByCustomerAndEmployee/{customerId}/{employeeId:int}")]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetByCustomerAndEmployee(string customerId, int employeeId)
         {
-            if (customerId is null || customerId.Length != 5 || employeeId <= 0) return BadRequest();
+            if (customerId is null || customerId.Length != 5) return BadRequest(CustomerErrorMessages.BadIdLength);
+            if (employeeId <= 0) return BadRequest(OrderErrorMessages.InvalidEmployeeId);
 
             IEnumerable<OrderDTO> orders = await _orderServices.GetOrdersByCustomerAndEmployeeAsync(customerId, employeeId);
             
@@ -57,23 +59,23 @@ namespace NorthwindApi.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderCreateDTO>> Create(OrderCreateDTO newOrder)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(OrderErrorMessages.ModelNotValid);
 
             OrderDTO? createdOrder = await _orderServices.AddOrderAsync(newOrder);
 
-            if (createdOrder is null) return BadRequest("The customer, the employee or the shipper doesn't exist");
+            if (createdOrder is null) return BadRequest(ProductErrorMessages.EntitiesNotFound);
             return CreatedAtAction(nameof(GetById), new { id = createdOrder.OrderID }, createdOrder);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(OrderDTO orderDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(OrderErrorMessages.ModelNotValid);
 
             bool result = await _orderServices.UpdateOrderAsync(orderDTO);
 
             if (result) return NoContent();
-            return BadRequest("The Order, the Customer, the Employee or the Shipper doesn't exist");
+            return BadRequest(OrderErrorMessages.OrderOrEntitesNotFound);
         }
 
         [HttpDelete("{id:int}")]

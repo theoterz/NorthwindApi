@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NorthwindBL;
 using NorthwindModels.DTOs;
+using NorthwindModels.ErrorMessages;
 
 namespace NorthwindApi.Controllers
 {
@@ -35,23 +36,23 @@ namespace NorthwindApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductDTO>> CreateProduct(ProductCreateDTO productDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ProductErrorMessages.ModelNotValid);
 
             ProductDTO? createdProduct = await _productServices.AddProductAsync(productDTO);
 
-            if (createdProduct is null) return BadRequest("The supplier or the category doesn't exist");
+            if (createdProduct is null) return BadRequest(ProductErrorMessages.EntitiesNotFound);
             return CreatedAtAction(nameof(GetById), new { id = createdProduct.ProductId }, createdProduct);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(ProductDTO product)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ProductErrorMessages.ModelNotValid);
 
             bool result = await _productServices.UpdateProductAsync(product);
 
             if (result) return NoContent();
-            return BadRequest("The product, the supplier or the category doesn't exist");
+            return BadRequest(ProductErrorMessages.ProductOrEntitiesNotFound);
         }
 
         [HttpDelete("{id:int}")]

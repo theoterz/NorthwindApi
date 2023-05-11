@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using NorthwindComponentLibrary;
 using NorthwindModels.DTOs;
+using NorthwindModels.ErrorMessages;
 using NorthwindUIBL.Interfaces;
 using Radzen;
 using Radzen.Blazor;
@@ -43,10 +44,10 @@ namespace NorthwindWebUI.Pages
         {
             string result = await OrderService.Create((OrderCreateDTO)newOrder);
 
-            if (result.Equals("Success"))
+            if (result.Equals(OrderErrorMessages.Success))
             {
                 DialogService.Close();
-                NotificationService.Notify(NotificationSeverity.Success, "The Order has been created!");
+                NotificationService.Notify(NotificationSeverity.Success, OrderErrorMessages.OrderCreated);
                 await GetAllOrders();
                 _ordersGrid?.Reload();
             }
@@ -71,10 +72,10 @@ namespace NorthwindWebUI.Pages
         {
             string result = await OrderService.Update((OrderDTO)order);
 
-            if (result.Equals("Success"))
+            if (result.Equals(OrderErrorMessages.Success))
             {
                 DialogService.Close();
-                NotificationService.Notify(NotificationSeverity.Success, "The Order has been updated!");
+                NotificationService.Notify(NotificationSeverity.Success, OrderErrorMessages.OrderUpdated);
                 await GetAllOrders();
                 _ordersGrid?.Reload();
             }
@@ -96,9 +97,9 @@ namespace NorthwindWebUI.Pages
                 {
                     await GetAllOrders();
                     _ordersGrid?.Reload();
-                    NotificationService.Notify(NotificationSeverity.Success, "The Order is successfuly deleted!");
+                    NotificationService.Notify(NotificationSeverity.Success, OrderErrorMessages.OrderDeleted);
                 }
-                else NotificationService.Notify(NotificationSeverity.Error, "An error occured during the deletion!");
+                else NotificationService.Notify(NotificationSeverity.Error, OrderErrorMessages.DeletionError);
             }
         }
     }
