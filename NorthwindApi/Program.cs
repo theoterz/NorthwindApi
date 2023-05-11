@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using NorthwindBL;
-using NorthwindDAL;
 using NorthwindDAL.Repositories;
 using NorthwindDAL.Interfaces;
 using NorthwindModels;
+using NorthwindDAL.DataContext;
 
 internal class Program
 {

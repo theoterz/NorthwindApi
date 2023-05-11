@@ -56,10 +56,12 @@ namespace NorthwindWebUI.Pages
 
         private async Task OnRowClick(ProductDTO product)
         {
+            ProductDTO productToUpdate = product with { };
+
             Dictionary<string, object> parameters = new()
             {
                 { "OperationName", EntityForm.OperationType.Edit },
-                { "Entity", product.Clone() },
+                { "Entity", productToUpdate },
                 { "EntityType", typeof(ProductDTO) },
                 { "Operation", EventCallback.Factory.Create<object>(this, UpdateProduct) }
             };

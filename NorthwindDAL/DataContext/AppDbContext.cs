@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NorthwindModels.Models;
 
-namespace NorthwindDAL
+namespace NorthwindDAL.DataContext
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }

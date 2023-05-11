@@ -57,10 +57,12 @@ namespace NorthwindWebUI.Pages
 
         private async Task OnRowClick(OrderDTO order)
         {
+            OrderDTO orderToUpdate = order with { };
+
             Dictionary<string, object> parameters = new()
             {
                 { "OperationName", EntityForm.OperationType.Edit },
-                { "Entity", order.Clone() },
+                { "Entity", orderToUpdate },
                 { "EntityType", typeof(OrderDTO) },
                 { "Operation", EventCallback.Factory.Create<object>(this, UpdateOrder) }
             };

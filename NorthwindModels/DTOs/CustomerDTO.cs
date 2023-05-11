@@ -1,15 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NorthwindModels.ErrorMessages;
+using System.ComponentModel.DataAnnotations;
 
 namespace NorthwindModels.DTOs
 {
-    public class CustomerDTO
+    public record CustomerDTO
     {
         [Key]
-        [StringLength(5, ErrorMessage = "The field Customer ID must be a string with a maximum length of 5")]
-        [Required(ErrorMessage = "The Customer ID field is required.")]
+        [StringLength(5, ErrorMessage = CustomerErrorMessages.BadIdLength)]
+        [Required(ErrorMessage = CustomerErrorMessages.IdRequired)]
         public string CustomerID { get; set; } = null!;
         [MaxLength(40)]
-        [Required(ErrorMessage = "The Company Name field is required.")]
+        [Required(ErrorMessage = CustomerErrorMessages.CompanyNameRequired)]
         public string CompanyName { get; set; } = null!;
         [MaxLength(30)]
         public string? ContactName { get; set; }
@@ -22,14 +23,5 @@ namespace NorthwindModels.DTOs
         public string? Phone { get; set; }
         [MaxLength(24)]
         public string? Fax { get; set; }
-
-        /// <summary>
-        /// Creates a shallow copy of the object
-        /// </summary>
-        /// <returns>A copy of the object</returns>
-        public CustomerDTO Clone()
-        {
-            return (CustomerDTO)MemberwiseClone();
-        }
     }
 }

@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NorthwindModels.ErrorMessages;
+using System.ComponentModel.DataAnnotations;
 
 namespace NorthwindModels.DTOs
 {
-    public class OrderCreateDTO
+    public record OrderCreateDTO
     {
-        [StringLength(5, ErrorMessage = "The field Customer ID must be a string with a maximum length of 5")]
+        [StringLength(5, ErrorMessage = CustomerErrorMessages.BadIdLength)]
         public string? CustomerID { get; set; }
-        [Range(0, int.MaxValue, ErrorMessage = "The Employee Id must be greater than 0!")]
+        [Range(0, int.MaxValue, ErrorMessage = OrderErrorMessages.InvalidEmployeeId)]
         public int? EmployeeID { get; set; }
-        [Range(0, int.MaxValue, ErrorMessage = "The Shipper Id must be greater than 0!")]
+        [Range(0, int.MaxValue, ErrorMessage = OrderErrorMessages.InvalidShipperId)]
         public int? ShipVia { get; set; }
         [MaxLength(40)]
         public string? ShipName { get; set; }
