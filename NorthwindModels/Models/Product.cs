@@ -1,8 +1,8 @@
 ﻿namespace NorthwindModels.Models
 {
-    public class Product
+    public class Product : IEntity<int>
     {
-        public int ProductId { get; set; }
+        public int Id { get; set; }
         public string ProductName { get; set; } = null!;
         public int? SupplierId { get; set; }
         public int? CategoryId { get; set; }

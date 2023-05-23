@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NorthwindBL;
+using NorthwindBL.Interfaces;
 using NorthwindModels.DTOs;
 using NorthwindModels.ErrorMessages;
 
@@ -9,8 +9,8 @@ namespace NorthwindApi.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly CustomerServices _customerServices;
-        public CustomersController(CustomerServices customerServices)
+        private readonly ICustomerServices _customerServices;
+        public CustomersController(ICustomerServices customerServices)
         {
             _customerServices = customerServices;
         }

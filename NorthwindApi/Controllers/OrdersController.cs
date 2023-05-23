@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NorthwindBL;
+using NorthwindBL.Interfaces;
 using NorthwindModels.DTOs;
 using NorthwindModels.ErrorMessages;
 
@@ -9,8 +9,8 @@ namespace NorthwindApi.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly OrderServices _orderServices;
-        public OrdersController(OrderServices orderServices)
+        private readonly IOrderServices _orderServices;
+        public OrdersController(IOrderServices orderServices)
         {
             _orderServices = orderServices;
         }

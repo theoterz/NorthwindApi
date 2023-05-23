@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NorthwindBL;
+using NorthwindBL.Interfaces;
 using NorthwindModels.DTOs;
 using NorthwindModels.ErrorMessages;
 
@@ -9,8 +9,8 @@ namespace NorthwindApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly ProductServices _productServices;
-        public ProductsController(ProductServices productServices)
+        private readonly IProductServices _productServices;
+        public ProductsController(IProductServices productServices)
         {
             _productServices = productServices;
         }

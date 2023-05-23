@@ -8,16 +8,16 @@ namespace NorthwindModels
     {
         public AutoMapperProfile()
         {
-            CreateMap<Customer, CustomerDTO>();
-            CreateMap<CustomerDTO, Customer>();
-            CreateMap<CustomerCreateDTO, Customer>();
+            CreateMap<Customer, CustomerDTO>().ForMember(dest => dest.CustomerID, opt => opt.MapFrom(src => src.Id));
+            CreateMap<CustomerDTO, Customer>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CustomerID));
+            CreateMap<CustomerCreateDTO, Customer>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CustomerID));
 
-            CreateMap<Order, OrderDTO>();
+            CreateMap<Order, OrderDTO>().ForMember(dest => dest.OrderID, opt => opt.MapFrom(src => src.Id));
             CreateMap<OrderCreateDTO, Order>();
-            CreateMap<OrderDTO, Order>();
+            CreateMap<OrderDTO, Order>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.OrderID));
 
-            CreateMap<Product, ProductDTO>();
-            CreateMap<ProductDTO, Product>();
+            CreateMap<Product, ProductDTO>().ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id));
+            CreateMap<ProductDTO, Product>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProductId));
             CreateMap<ProductCreateDTO, Product>();
         }
     }

@@ -1,8 +1,8 @@
 ﻿namespace NorthwindModels.Models
 {
-    public class Customer
+    public class Customer : IEntity<string>
     {
-        public string CustomerID { get; set; } = null!;
+        public string Id { get; set; } = null!;
         public string CompanyName { get; set; } = null!;
         public string? ContactName { get; set; }
         public string? ContactTitle { get; set; }

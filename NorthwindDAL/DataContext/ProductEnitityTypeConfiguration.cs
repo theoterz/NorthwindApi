@@ -8,7 +8,8 @@ namespace NorthwindDAL.DataContext
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasKey(p => p.ProductId).HasName(nameof(Product.ProductId));
+            builder.HasKey(p => p.Id).HasName(nameof(Product.Id));
+            builder.Property(p => p.Id).HasColumnName("ProductId");
 
             builder.Property(p => p.ProductName).IsRequired().HasMaxLength(40);
 

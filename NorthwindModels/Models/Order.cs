@@ -1,8 +1,8 @@
 ﻿namespace NorthwindModels.Models
 {
-    public class Order
+    public class Order : IEntity<int>
     {
-        public int OrderID { get; set; }
+        public int Id { get; set; }
         public string? CustomerID { get; set; }
         public int? EmployeeID { get; set; }
         public DateTime? OrderDate { get; set; }
